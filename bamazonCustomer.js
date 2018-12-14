@@ -18,17 +18,17 @@ connection.connect(function(err) {
     if (err) throw err;
     console.log("\nconnected as id " + connection.threadId);
     showAll();
-    prompt();
     //end();
 });
 
 //Shows all of our products
 function showAll() {
-    connection.query("SELECT * FROM products", function(err, res) {
+    connection.query("SELECT id, product_name, price FROM products", function(err, res) {
         if (err) throw err;
         console.log(res);
         console.log("--------------------------------------");
     })
+    prompt();
 };
 
 //Prompts the user to choose a product to buy
@@ -44,7 +44,7 @@ function prompt() {
             name: "quantity",
             message: "How many would you like to buy?",
             type: "list",
-            choices: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+            choices: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
         }
     ]).then(function(customerAnswers) {
 
@@ -57,7 +57,10 @@ function prompt() {
 function quantityCheck(p1, p2) {
     connection.query("SELECT stock_quantity FROM products WHERE id = ?", [p1], function(err, res) {
         if (err) throw err;
-        if (p2 > res[0].stock_quantity) {
+        if (p2 === "0") {
+            console.log("Oh?  You changed your mind?");
+            end();
+        } else if (p2 > res[0].stock_quantity) {
             console.log("Insufficient Quantity!");
             end();
         } else {
@@ -94,4 +97,5 @@ function customerOrder(p1, p2) {
 //function to end our connection, used primarily so all other functions run first
 function end() {
     connection.end();
+    console.log("Smell ya later, Kid.")
 }
