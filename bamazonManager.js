@@ -112,7 +112,7 @@ function addNewProduct(p1, p2, p3, p4) {
             stock_quantity: p4
         }
     ];
-    connection.query("INSERT INTO products SET ?", post,
+    connection.query("INSERT INTO products SET ?, ?, ?, ?", post,
     function(err) {
         if (err) {
             console.log("Something went wrong Manager, please put in non-stupid answers.");
